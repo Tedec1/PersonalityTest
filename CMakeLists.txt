@@ -3,4 +3,4 @@ project(PersonalityTest)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(PersonalityTest main.cpp)
+add_executable(PersonalityTest proj1.cpp)
