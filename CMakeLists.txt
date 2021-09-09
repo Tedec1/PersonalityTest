@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.20)
-project(PersonalityTest)
+project(project1)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(PersonalityTest proj1.cpp)
+include_directories(.)
+
+add_executable(PersonalityTest
+        personality_test.cpp
+        personality_test.h
+        proj1.cpp)

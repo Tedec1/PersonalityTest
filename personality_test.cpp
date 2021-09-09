@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <sstream>
 #include "personality_test.h"
 
 using namespace std;
@@ -13,10 +14,8 @@ using namespace std;
  * Output: Boolean
  */
 bool personality_test::load(istream &in) {
-    //TODO
-    fstream fin;
-    in >> fin;
 
+    //TODO
     cout << "called load" << endl;
     return false;
 }

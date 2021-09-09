@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <vector>
+
 
 #include "personality_test.h"
 //link to project details/instructions \/
@@ -39,10 +39,32 @@ int main () {
  * @return None, Text to Console
  */
 void load_file(personality_test& test) {
-    while (true) {
+    bool a = true;
+    while (a) {
         string fileName;
-        cout << "Please enter the input file name, e.g., \"questions.txt\": ";
-        break;
+        cout << endl;
+        cout << "Please enter the input file name, e.g., \"questions.txt\": ";\
+        cin >> fileName;
+        fstream fin;
+        fin.exceptions( std::ifstream::failbit | std::ifstream::badbit);
+        try {
+
+            fin.open(fileName);
+            string s;
+            while(!fin.eof()){
+                getline(fin,s);
+                cout << s << endl;
+            }
+            fin.close();
+            a = false;
+        } catch (fstream::failure &e) {
+            cout << endl;
+            cout << "error opening file: \"" << fileName << "\" " << endl;
+            a = true;
+        }
+//        istream s;
+//        test.load(fileName);
+//        break;
         //TODO
     }
 }
