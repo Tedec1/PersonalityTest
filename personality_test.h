@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
-
+#include <list>
 using namespace std;
 
 // personality test class
@@ -19,7 +19,15 @@ class personality_test {
         // Add anything you may need
         
     private:
-        // Add anything you may need
+        class question{
+        public:
+            int catId;
+            string q;
+            string y;
+            string n;
+        };
+        list<question> questions;
+        fstream _testFile;
 };
 
 #endif

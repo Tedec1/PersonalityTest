@@ -14,6 +14,9 @@ using namespace std;
  */
 bool personality_test::load(istream &in) {
     //TODO
+    fstream fin;
+    in >> fin;
+
     cout << "called load" << endl;
     return false;
 }
