@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <list>
+
 using namespace std;
 
 // personality test class
@@ -19,15 +20,14 @@ class personality_test {
         // Add anything you may need
         
     private:
-        class question{
+        class question {
         public:
-            int catId;
-            string q;
-            string y;
-            string n;
+            int category_id;
+            string question;
+            string yes_answer;
+            string no_answer;
         };
         list<question> questions;
-        fstream _testFile;
 };
 
 #endif
