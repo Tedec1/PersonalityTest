@@ -14,8 +14,13 @@ using namespace std;
  * Output: Boolean
  */
 bool personality_test::load(istream &in) {
-
-    //TODO
+    in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+        string s;
+        while(!in.eof()){
+            getline(in,s);
+            cout << s << endl;
+            //TODO
+        }
     cout << "called load" << endl;
     return false;
 }

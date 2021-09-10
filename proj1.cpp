@@ -46,28 +46,14 @@ void load_file(personality_test& test) {
         cout << "Please enter the input file name, e.g., \"questions.txt\": ";\
         cin >> fileName;
         fstream fin(fileName);
-//        istream* is;
-        test.load(fin);
-        fin.exceptions( std::ifstream::failbit | std::ifstream::badbit);
         try {
-
-//            fin.open(fileName);
-            string s;
-            while(!fin.eof()){
-                getline(fin,s);
-                cout << s << endl;
-            }
-            fin.close();
+            test.load(fin);
             a = false;
-
         } catch (fstream::failure &e) {
             cout << endl;
             cout << "error opening file: \"" << fileName << "\" " << endl;
             a = true;
         }
-//        istream s;
-//        test.load(fileName);
-//        break;
         //TODO
     }
 }
