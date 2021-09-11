@@ -29,8 +29,9 @@ class personality_test {
         // Add anything you may need
         void add_question(int id,const string& line);
     vector<question> questions;
-    private:
-
+    int amount_of_categories;
+    vector<string> all_types;
+private:
 };
 
 #endif

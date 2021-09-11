@@ -56,8 +56,23 @@ personality_test::question::question(int id, const string& line) {
     q = line.substr(pos);
 }
 void personality_test::add_question(int id, const string& line) {
+    if(id > amount_of_categories){
+        amount_of_categories = id;
+    }
     auto* a = new question(id,line);
     questions.push_back(*a);
+    if(!all_types.empty()){
+        for (const string& t: all_types) {
+            if(t == a->no_answer || t == a->yes_answer){
+                return;
+            }
+        }
+        all_types.push_back(a->yes_answer);
+        all_types.push_back(a->no_answer);
+    } else {
+        all_types.push_back(a->yes_answer);
+        all_types.push_back(a->no_answer);
+    }
 }
 
 
@@ -80,8 +95,9 @@ void personality_test::run_test() {
     //Uncomment below as you comeplete them
     //Feel free to add any other methods to call
 
-    //string output = analyzePersonality();
-    //categorizeOutput(output);
+    string output = analyze_personality();
+    cout << "your type: " << output << endl;
+//    categorize_output(output);
 }
 
 /* Analyze Personality Method
@@ -91,9 +107,49 @@ void personality_test::run_test() {
  * @param None
  * @return string
  */
+bool valid_response(string& s){
+    const vector<string> yes_tests = {"Y", "y", "yes", "Yes", "YES"};
+    const vector<string> no_tests = { "N", "n", "no", "No", "NO"};
+    for (const string& test:yes_tests) {
+        if(s == test){
+            return true;
+        }
+    }
+    for (const string& test:no_tests) {
+        if(s == test){
+            return false;
+        }
+    }
+    throw runtime_error("Sorry, I didn't recognize your input, please type again");
+}
 string personality_test::analyze_personality() {
-    //TODO
-    string output = "";
+    string response;
+    map<string,int> types;
+    for (const string& t:all_types) {
+        types.insert(pair<string,int>(t,0));
+    }
+    for (const question& q:questions) {
+        cout << q.q + "\n";
+        while(response.empty()){
+            cin >> response;
+            try {
+                if(valid_response(response)){
+                    types.at(q.yes_answer) += 1;
+                } else {
+                    types.at(q.no_answer) += 1;
+                }
+            } catch (runtime_error& e) {
+                cout << e.what() << endl;
+                response.clear();
+            }
+        }
+        response.clear();
+    }
+    string output;
+    output += types.at("I") > types.at("E") ? "I" : "E";
+    output += types.at("N") > types.at("S") ? "N" : "S";
+    output += types.at("T") > types.at("F") ? "T" : "F";
+    output += types.at("P") > types.at("J") ? "P" : "J";
     return output;
 }
 
@@ -104,7 +160,7 @@ string personality_test::analyze_personality() {
  * @return None, Text to console
  */
 void personality_test::categorize_output(string my_personality) {
-    //TODO
+    // TODO
 }
 
 /* Save Output
@@ -114,5 +170,5 @@ void personality_test::categorize_output(string my_personality) {
  * @return None, creates a file
  */
 void personality_test::save_output(string output) {
-    //TODO
+    // TODO
 }

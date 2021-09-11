@@ -1,11 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-
-
 #include "personality_test.h"
-//link to project details/instructions \/
-// http://cs-courses.mines.edu/csci262/fall2021/#/writeup/project/personality-test
+
 
 using namespace std;
 
@@ -26,7 +23,8 @@ int main () {
     // Uncomment the below methods as you complete them
     load_file(test);
 //    test.printout();
-    //test.run_test();
+//test.analyze_personality();
+    test.run_test();
 
 }
 
@@ -59,6 +57,5 @@ void load_file(personality_test& test) {
         } catch (runtime_error &e) {
             cout << e.what() << endl;
         }
-        //TODO
     }
 }
