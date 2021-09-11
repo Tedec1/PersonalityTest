@@ -4,6 +4,8 @@
 #include <vector>
 #include <sstream>
 #include "personality_test.h"
+#include <regex>
+#include <stdexcept>
 
 using namespace std;
 
@@ -18,9 +20,12 @@ bool personality_test::load(istream &in) {
         string s;
         while(!in.eof()){
             getline(in,s);
-            cout << s << endl;
-            //TODO
-        }
+            regex test("/([0-9] [A-z] [A-z] .+)/g");
+            if(regex_match(s.begin(),s.end(),test) ){
+                add_question((int)s[0],s.substr(1));
+            }
+        } 
+    if (questions.empty()) throw runtime_error("Input file appears to not be a proper file!");
     cout << "called load" << endl;
     return false;
 }

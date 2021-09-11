@@ -53,6 +53,8 @@ void load_file(personality_test& test) {
             cout << endl;
             cout << "error opening file: \"" << fileName << "\" " << endl;
             a = true;
+        } catch (runtime_error &e) {
+            cout << e.what() << endl;
         }
         //TODO
     }

@@ -5,7 +5,7 @@
 #include <utility>
 #include <vector>
 #include <iostream>
-#include <list>
+//#include <list>
 
 using namespace std;
 
@@ -16,7 +16,10 @@ class personality_test {
     public:
         question(int id,string line){
             category_id = id;
+            stringstream ss;
+
             q = line;
+
             //TODO
         }
         int category_id;
@@ -35,7 +38,7 @@ class personality_test {
             auto* a = new question(id,line);
             questions.push_back(*a);
         }
-    list<question> questions;
+    vector<question> questions;
     private:
 
 
