@@ -21,11 +21,12 @@ int main () {
     personality_test test;
 
     // Uncomment the below methods as you complete them
-    load_file(test);
+    bool play_again = true;
+    while(play_again){
+        load_file(test);
+        play_again = test.run_test();
+    }
 //    test.printout();
-//test.analyze_personality();
-    test.run_test();
-
 }
 
 /* Load File Method
@@ -50,6 +51,7 @@ void load_file(personality_test& test) {
             } else {
                 throw runtime_error("Input file \"" + fileName + "\" appears to not be a proper file!");
             }
+            fin.close();
         } catch (fstream::failure &e) {
             cout << endl;
             cout << "error opening file: \"" << fileName << "\" " << endl;

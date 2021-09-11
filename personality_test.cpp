@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <utility>
 #include <vector>
 #include <sstream>
 #include "personality_test.h"
@@ -35,7 +34,7 @@ bool personality_test::load(istream &in) {
             i++;
         } 
     if (questions.empty()) return false;
-    cout << "called load" << endl;
+    cout << "questions loaded" << endl;
     if(questions.size() == numOfQuestions){
         return true;
     } else return false;
@@ -91,22 +90,6 @@ void personality_test::printout() {
  * @param: None
  * @return: None, Text to Console
  */
-void personality_test::run_test() {
-    //Uncomment below as you comeplete them
-    //Feel free to add any other methods to call
-
-    string output = analyze_personality();
-    cout << "your type: " << output << endl;
-//    categorize_output(output);
-}
-
-/* Analyze Personality Method
- * 1) Ask user one question at a time
- * 2) Read in user's response and construct a vector containing the responses
- * 3) Analyze the responses to construct a personality type (eg. ENFJ)
- * @param None
- * @return string
- */
 bool valid_response(string& s){
     const vector<string> yes_tests = {"Y", "y", "yes", "Yes", "YES"};
     const vector<string> no_tests = { "N", "n", "no", "No", "NO"};
@@ -122,6 +105,41 @@ bool valid_response(string& s){
     }
     throw runtime_error("Sorry, I didn't recognize your input, please type again");
 }
+
+bool personality_test::run_test() {
+    //Uncomment below as you complete them
+    //Feel free to add any other methods to call
+
+    string output = analyze_personality();
+    categorize_output(output);
+    string res;
+    res.clear();
+    cout << "Would you like to play again?";
+    while(res.empty()){
+        try {
+            cin >> res;
+            if(valid_response(res)){
+                return true;
+            } else {
+                return false;
+            }
+        } catch (runtime_error &e){
+            cout << e.what() << endl;
+            res.clear();
+        }
+    }
+    return false;
+}
+
+
+
+/* Analyze Personality Method
+ * 1) Ask user one question at a time
+ * 2) Read in user's response and construct a vector containing the responses
+ * 3) Analyze the responses to construct a personality type (eg. ENFJ)
+ * @param None
+ * @return string
+ */
 string personality_test::analyze_personality() {
     string response;
     map<string,int> types;
@@ -159,8 +177,79 @@ string personality_test::analyze_personality() {
  * @param Personality type string (eg. "ENFJ")
  * @return None, Text to console
  */
-void personality_test::categorize_output(string my_personality) {
-    // TODO
+personality_test::type_info::type_info(string type, const string& rest_of_line) {
+    int pos = 0;
+    personality = type;
+    category = rest_of_line.substr(pos,rest_of_line.find(' '));
+    pos = rest_of_line.find(' ',pos) + 1;
+    title = rest_of_line.substr(pos,rest_of_line.find(' ') + 1);
+    pos = rest_of_line.find(' ',pos) + 1;
+    desc = rest_of_line.substr(pos);
+}
+
+void personality_test::categorize_output(const string& my_personality) {
+    map<string,string> full_type_def;
+    string s;
+    bool a = true;
+    while (a) {
+        string fileName;
+        cout << endl;
+        cout << "Please enter the analysis file name, e.g., \"analysis.txt\": ";
+        cin >> fileName;
+        ifstream fin;
+        fin.exceptions(ifstream::failbit | ifstream::badbit);
+        try {
+            fin.open(fileName);
+            int i = 0;
+            while(!fin.eof()){
+                if(i == 17){
+                    break;
+                }
+                getline(fin,s);
+                if(i == 0){
+                    i++;
+                    continue;
+                }
+                full_type_def.insert(pair<string,string>(s.substr(0,s.find(' ')),s.substr(s.find(' ') + 1)));
+                i++;
+            }
+            a = false;
+            fin.close();
+        } catch (ifstream::failure &e) {
+            cout << endl;
+            cout << "error opening file: \"" << fileName << "\" " << endl;
+            a = true;
+        } catch (runtime_error &e){
+            cout << e.what() << endl;
+            a = true;
+        } catch (exception &e){
+            cout << e.what() << endl;
+            a = true;
+        }
+    }
+
+    type_info result(my_personality,full_type_def.at(my_personality));
+    cout << "===============\n";
+    cout << "Your personality type is: " << result.personality << endl;
+    cout << "The category is: " << result.category << endl;
+    cout << "You are: The "<<  result.title << endl;
+    cout << "Description: " << result.desc << endl;
+    cout << "===============\n";
+    cout << "Would you like to save? \n";
+    string res;
+    while(res.empty()){
+        try {
+            cin >> res;
+            if(valid_response(res)){
+                save_output(result);
+            } else {
+                return;
+            }
+        } catch (runtime_error &e){
+            cout << e.what() << endl;
+            res.clear();
+        }
+    }
 }
 
 /* Save Output
@@ -169,6 +258,21 @@ void personality_test::categorize_output(string my_personality) {
  * @param string (the thing to write)
  * @return None, creates a file
  */
-void personality_test::save_output(string output) {
-    // TODO
+void personality_test::save_output(type_info output) {
+
+    try {
+        cout << "Please enter a file name \n";
+        string res;
+        cin >> res;
+        ofstream of(res);
+        string to_file = "Your personality type is: " + output.personality + "\n" + "The category is: " + output.category + "\n" + "You are: The " + output.title + "\n" + "Description: " + output.desc;
+        of << to_file;
+        of.close();
+    } catch (ifstream::failure &e) {
+        cout << "file was not saved";
+    } catch (runtime_error &e){
+        cout << e.what() << endl;
+    } catch (exception &e){
+        cout << e.what() << endl;
+    }
 }
