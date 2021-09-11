@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <utility>
 #include <vector>
 #include <sstream>
 #include "personality_test.h"
@@ -18,24 +19,55 @@ using namespace std;
 bool personality_test::load(istream &in) {
     in.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         string s;
+        int i = 0;
+        int numOfQuestions;
         while(!in.eof()){
             getline(in,s);
-            regex test("/([0-9] [A-z] [A-z] .+)/g");
-            if(regex_match(s.begin(),s.end(),test) ){
-                add_question((int)s[0],s.substr(1));
+            if(i == 0){
+                numOfQuestions = stoi(s.substr(0,s.find(' ')));
+                i++;
+                continue;
             }
+            regex test("([0-9]+ [A-z] [A-z] .+)");
+            if(regex_match(s,test)){
+                add_question(stoi(s.substr(0,s.find(' '))),s.substr(s.find(' ') + 1));
+            }
+            i++;
         } 
-    if (questions.empty()) throw runtime_error("Input file appears to not be a proper file!");
+    if (questions.empty()) return false;
     cout << "called load" << endl;
-    return false;
+    if(questions.size() == numOfQuestions){
+        return true;
+    } else return false;
 }
         
 /* personality_test::printout method
  * 1) Printout the questions to ensure that the load method was written correctly
  * This part will not be graded, just for your own check
  */
+
+personality_test::question::question(int id, const string& line) {
+    category_id = id;
+    int pos = 0;
+    yes_answer = line.substr(pos,line.find(' '));
+    pos = line.find(' ',pos) + 1;
+    no_answer = line.substr(pos,line.find(' '));
+    pos = line.find(' ',pos) + 1;
+    q = line.substr(pos);
+}
+void personality_test::add_question(int id, const string& line) {
+    auto* a = new question(id,line);
+    questions.push_back(*a);
+}
+
+
 void personality_test::printout() {
-    //TODO
+    for(const question& q: questions){
+        cout << "cat_id: "<< q.category_id << endl;
+        cout << "yes_answer: "<< q.yes_answer << endl;
+        cout << "no_answer: "<< q.no_answer << endl;
+        cout << "question: "<< q.q << "\n\n";
+    }
     cout << "called printout" << endl;
 }
 

@@ -25,7 +25,7 @@ int main () {
 
     // Uncomment the below methods as you complete them
     load_file(test);
-    //test.printout();
+//    test.printout();
     //test.run_test();
 
 }
@@ -47,8 +47,11 @@ void load_file(personality_test& test) {
         cin >> fileName;
         fstream fin(fileName);
         try {
-            test.load(fin);
-            a = false;
+            if(test.load(fin)){
+                a = false;
+            } else {
+                throw runtime_error("Input file \"" + fileName + "\" appears to not be a proper file!");
+            }
         } catch (fstream::failure &e) {
             cout << endl;
             cout << "error opening file: \"" << fileName << "\" " << endl;

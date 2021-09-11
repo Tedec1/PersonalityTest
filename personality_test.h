@@ -14,14 +14,7 @@ class personality_test {
     public:
     class question {
     public:
-        question(int id,string line){
-            category_id = id;
-            stringstream ss;
-
-            q = line;
-
-            //TODO
-        }
+        question(int id,const string& line);
         int category_id;
         string q;
         string yes_answer;
@@ -34,13 +27,9 @@ class personality_test {
         void categorize_output(string);
         void save_output(string);
         // Add anything you may need
-        void add_question(int id,string line){
-            auto* a = new question(id,line);
-            questions.push_back(*a);
-        }
+        void add_question(int id,const string& line);
     vector<question> questions;
     private:
-
 
 };
 
